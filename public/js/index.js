@@ -17,13 +17,6 @@ socket.on('newMessage', function(msg){
   $('#messages').append(li);
 });
 
-socket.emit('createMessage', {
-  from: 'Egan',
-  text: 'Hi'
-}, function(confirmation){
-  console.log('Got it,', confirmation);
-});
-
 $('#message-form').on('submit', (e)=>{
   //prevents default behavior from that event, which initially refresh
   e.preventDefault();
