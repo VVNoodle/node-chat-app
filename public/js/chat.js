@@ -16,8 +16,15 @@ function scrollToBtm () {
 }
 
 socket.on('connect', function(){
-  console.log('Connected to Server');
-
+  const par = $.deparam(window.location.search);
+  socket.emit('join', par, (err)=>{
+    if (err) {
+      alert(err);
+      window.location.href = '/';
+    }else {
+      console.log('No error');
+    }
+  });
 });
 
 socket.on('disconnect', function(){

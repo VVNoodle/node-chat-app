@@ -5,6 +5,7 @@ const path = require('path');
 const http = require('http');
 
 const {generateMessage, generateLocMsg} = require('./utils/message.js');
+const {isRealString} = require('./utils/validation.js');
 const port = process.env.PORT || 3000;
 
 
@@ -17,8 +18,17 @@ app.use(express.static(publicPath));
 
 io.on('connection', (socket)=>{
   console.log('New user connected');
-  socket.emit('newMessage', generateMessage('Admin','Welcome to the chat app'));
-  socket.broadcast.emit('newMessage', generateMessage('Admin','A new user joined the chat'));
+
+  socket.on('join', (par, callback)=>{
+    if(!isRealString(par.name) || !isRealString(par.room)){
+      callback("Invalid params.");
+    }
+    socket.join(par.room);
+
+    socket.emit('newMessage', generateMessage('Admin','Welcome to the chat app'));
+    socket.broadcast.to(par.room).emit('newMessage', generateMessage('Admin', `${par.name} has joined the chat`));
+    callback();
+  });
 
   socket.on('createMessage', (indiMsg, callback)=>{
     io.emit('newMessage', generateMessage(indiMsg.from,indiMsg.text));
