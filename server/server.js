@@ -22,7 +22,7 @@ io.on('connection', (socket)=>{
 
   socket.on('createMessage', (indiMsg, callback)=>{
     io.emit('newMessage', generateMessage(indiMsg.from,indiMsg.text));
-    callback('This is from server');
+    callback();
   });
 
   socket.on('createLocMsg', (loc)=>{

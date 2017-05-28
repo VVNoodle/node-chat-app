@@ -27,13 +27,13 @@ console.log(a);
 });
 
 $('#message-form').on('submit', (e)=>{
-  e.preventDefault();  //prevents default behavior from that event, which initially refresh
+  e.preventDefault();  //prevdents default behavior from that event, which initially refresh
+  var msgTxtBox = $('[name = input]');
   socket.emit('createMessage', {
     from:'User',
-    text: $('[name = input]').val(),
-    createdAt: new Date().getTime(),
+    text: msgTxtBox.val(),
   }, ()=>{
-    // console.log();
+     msgTxtBox.val("");
   });
 });
 
@@ -42,13 +42,17 @@ locButton.on('click', (e)=>{
   if (!navigator.geolocation) {
     return alert('no geolocation detected');
   }
+  locButton.attr('disabled', 'disabled').text('Sending location...');
+
   navigator.geolocation.getCurrentPosition((pos)=>{
     console.log(pos);
+    locButton.removeAttr('disabled').text('Send location');
     socket.emit('createLocMsg', {
       lat: pos.coords.latitude,
       lng: pos.coords.longitude,
     });
   }, (err)=>{
+    locButton.removeAttr('disabled').text('Send location');
     alert('Unable to fetch geolocation');
   });
 });
