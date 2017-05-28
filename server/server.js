@@ -36,12 +36,18 @@ io.on('connection', (socket)=>{
   });
 
   socket.on('createMessage', (indiMsg, callback)=>{
-    io.emit('newMessage', generateMessage(indiMsg.from,indiMsg.text));
+    var user = userClass.getUser(socket.id);
+    if (user && isRealString(indiMsg.text)) {
+      io.to(user.room).emit('newMessage', generateMessage(user.name,indiMsg.text));
+    }
     callback();
   });
 
   socket.on('createLocMsg', (loc)=>{
-    io.emit('newLocMsg', generateLocMsg('Admin', loc.lat, loc.lng));
+    var user = userClass.getUser(socket.id);
+    if (user) {
+      io.to(user.room).emit('newLocMsg', generateLocMsg(user.name, loc.lat, loc.lng));
+    }
   });
 
   socket.on('disconnect', ()=>{

@@ -70,8 +70,7 @@ $('#message-form').on('submit', (e)=>{
   e.preventDefault();  //prevdents default behavior from that event, which initially refresh
   var msgTxtBox = $('[name = input]');
   socket.emit('createMessage', {
-    from:'User',
-    text: msgTxtBox.val(),
+    text: msgTxtBox.val()
   }, ()=>{
      msgTxtBox.val("");
   });
