@@ -2,12 +2,13 @@ var socket = io();
 
 function scrollToBtm () {
   var msgs = $('#messages');
+  var clientHeight = msgs.prop('clientHeight'); //what we can see
+  var scrollTop = msgs.prop('scrollTop'); //between what we can see and the top area
+  var scrollHeight = msgs.prop('scrollHeight'); //THE WHOLE PART
+
   var newMessage= msgs.children('li:last-child');
-  var clientHeight = msgs.prop('clientHeight');
-  var scrollTop = msgs.prop('scrollTop');
-  var scrollHeight = msgs.prop('scrollHeight');
-  var newMsgHeight = newMessage.innerHeight();
-  var lastMsgHeight = newMessage.prev().innerHeight();
+  var newMsgHeight = newMessage.innerHeight(); //height of new message (not included in scrollHeight)
+  var lastMsgHeight = newMessage.prev().innerHeight(); //height of prev msg
 
   if ((scrollTop+clientHeight+newMsgHeight+lastMsgHeight) >= scrollHeight) {
     msgs.scrollTop(scrollHeight);
