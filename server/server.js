@@ -9,7 +9,7 @@ const {isRealString} = require('./utils/validation.js');
 const {Users} = require('./utils/users.js');
 const port = process.env.PORT || 3000;
 
-//make chatroom case insensitive
+//Delete autocomplete from forms
 //show list of active chatrooms
 
 var app = express();
@@ -24,16 +24,17 @@ io.on('connection', (socket)=>{
   console.log('New user connected');
 
   socket.on('join', (par, callback)=>{
-    if(!userClass.userValid(par.name) || !isRealString(par.name) || !isRealString(par.room)){
+    var lowerRoom = (par.room).toLowerCase();
+    if(!userClass.userValid(par.name) || !isRealString(par.name) || !isRealString(lowerRoom)){
       return callback("Invalid params.");
     }
-    socket.join(par.room);
+    socket.join(lowerRoom);
     userClass.removeUser(socket.id);
-    userClass.addUser(socket.id, par.name, par.room);
-    io.to(par.room).emit('updateUserList', userClass.getUserList(par.room));
+    userClass.addUser(socket.id, par.name, lowerRoom);
+    io.to(lowerRoom).emit('updateUserList', userClass.getUserList(lowerRoom));
 
     socket.emit('newMessage', generateMessage('Admin','Welcome to the chat app'));
-    socket.broadcast.to(par.room).emit('newMessage', generateMessage('Admin', `${par.name} has joined the chat`));
+    socket.broadcast.to(lowerRoom).emit('newMessage', generateMessage('Admin', `${par.name} has joined the chat`));
     callback();
   });
 
