@@ -9,6 +9,8 @@ const {isRealString} = require('./utils/validation.js');
 const {Users} = require('./utils/users.js');
 const port = process.env.PORT || 3000;
 
+//make chatroom case insensitive
+//show list of active chatrooms
 
 var app = express();
 var server = http.createServer(app);
@@ -22,7 +24,7 @@ io.on('connection', (socket)=>{
   console.log('New user connected');
 
   socket.on('join', (par, callback)=>{
-    if(!isRealString(par.name) || !isRealString(par.room)){
+    if(!userClass.userValid(par.name) || !isRealString(par.name) || !isRealString(par.room)){
       return callback("Invalid params.");
     }
     socket.join(par.room);

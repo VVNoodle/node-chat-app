@@ -9,6 +9,14 @@ class Users {
     return user;
   }
 
+  userValid(name){
+    let check = this.users.filter((list)=>{
+      return name === list.name;
+    });
+    if(check.length !== 0) return false;
+    return true;
+  }
+
   removeUser(id){
     const uniqueUser = this.users.filter((user)=> user.id === id);
     var i;
