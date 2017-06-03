@@ -5,7 +5,14 @@
     <title>join | ChatApp</title>
     <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
     <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/custom.css">
+    <link rel="stylesheet" href="css/bootstrap.css">
   </head>
+
+  <script src="/js/libs/jquery-3.2.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+
   <body class="centered-form">
     <div class="centered-form__form">
       <form action="/chat.html">
@@ -14,16 +21,36 @@
         </div>
         <div class="form-field">
           <label>Display name</label>
-          <input type="text," name="name" autofocus/>
+          <input type="text," name="name" autofocus autocomplete="off"/>
         </div>
         <div class="form-field">
           <label>Room name</label>
-          <input type="text" name="room" />
+          <input id="test" type="text" name="room" autocomplete="off"/>
         </div>
         <div class="form-field">
           <button>Join</button>
         </div>
       </form>
+
+      <div class="dropdown">
+        <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Active Rooms
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        </div>
+      </div>
+
     </div>
+
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/libs/moment.js"></script>
+    <script src="/js/libs/mustache.js"></script>
+    <script src="/js/libs/deparam.js"></script>
+    <script src=" /js/active-room.js"></script>
   </body>
 </html>
+
+<script id="room-template" type="text/template">
+      <a class="dropdown-item" href="#" onclick="insertRoom('{{roomName}}')">{{roomName}}</a>
+</script>

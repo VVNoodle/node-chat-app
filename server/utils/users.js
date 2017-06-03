@@ -39,6 +39,14 @@ class Users {
     userList = userList.map((user)=> user.name);
     return userList;
   }
+
+  getRoomList(){
+    var rooms = this.users.map((user) => {
+           return user.room;
+       });
+
+       return rooms;
+  }
 }
 
 module.exports = {Users};

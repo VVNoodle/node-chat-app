@@ -22,6 +22,7 @@ socket.on('connect', function(){
       alert(err);
       window.location.href = '/';
     }else {
+      var title = $(document).find("title").text(`chat | ${par.room}`);
       console.log('No error');
     }
   });

@@ -9,13 +9,13 @@ const {isRealString} = require('./utils/validation.js');
 const {Users} = require('./utils/users.js');
 const port = process.env.PORT || 3000;
 
-//Delete autocomplete from forms
-//show list of active chatrooms
-
 var app = express();
 var server = http.createServer(app);
 var io = socketIO(server);
 var userClass = new Users();
+var roomList = [];
+
+// var {addRoom} = require('./../public/js/active-room.js');
 
 const publicPath = path.join(__dirname, '/..', '/public');
 app.use(express.static(publicPath));
@@ -23,12 +23,16 @@ app.use(express.static(publicPath));
 io.on('connection', (socket)=>{
   console.log('New user connected');
 
+  socket.emit('roomList', {list: userClass.getRoomList()});
+
   socket.on('join', (par, callback)=>{
     var lowerRoom = (par.room).toLowerCase();
     if(!userClass.userValid(par.name) || !isRealString(par.name) || !isRealString(lowerRoom)){
       return callback("Invalid params.");
     }
     socket.join(lowerRoom);
+    roomList.push(lowerRoom);
+    console.log(userClass.getRoomList());
     userClass.removeUser(socket.id);
     userClass.addUser(socket.id, par.name, lowerRoom);
     io.to(lowerRoom).emit('updateUserList', userClass.getUserList(lowerRoom));
@@ -56,6 +60,13 @@ io.on('connection', (socket)=>{
   socket.on('disconnect', ()=>{
     var user = userClass.removeUser(socket.id);
     if (user) {
+      // var i = 0;
+      // disOne: for (i = 0; i < roomList.length; i++) {
+      //   if (roomList[i] === user.room) {
+      //     break disOne;
+      //   }
+      // }
+      // roomList.splice(i, i);
       io.to(user.room).emit('updateUserList', userClass.getUserList(user.room));
       io.to(user.room).emit('newMessage', generateMessage('Admin', `${user.name} has left the room`));
     }
