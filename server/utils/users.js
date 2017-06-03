@@ -1,3 +1,5 @@
+var _ = require('lodash');
+
 class Users {
   constructor(){
     this.users = [];
@@ -18,15 +20,13 @@ class Users {
   }
 
   removeUser(id){
-    const uniqueUser = this.users.filter((user)=> user.id === id);
-    var i;
-    for (i = 0; i < this.users.length; i++) {
-      if(this.users[i] === uniqueUser[0]){
-        break;
-      }
+    var user = this.getUser(id);
+    if (user) {
+      this.users = this.users.filter((currUser)=>{
+                  return currUser.id !== user.id;
+                });
     }
-    this.users.splice(i, i);
-    return uniqueUser[0];
+    return user;
   }
 
   getUser(id){
@@ -44,7 +44,8 @@ class Users {
     var rooms = this.users.map((user) => {
            return user.room;
        });
-
+       rooms = _.uniq(rooms);
+       console.log('rooms from users.js', rooms);
        return rooms;
   }
 }

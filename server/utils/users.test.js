@@ -18,7 +18,7 @@ describe('Users', ()=>{
       id: '3',
       name: 'Miguel',
       room: 'Node'
-    }]
+    }];
   });
 
   it('should be able to add user (addUser)', ()=>{
@@ -47,6 +47,7 @@ describe('Users', ()=>{
 
   it('should be able to remove user by ID (removeUser(id))', ()=>{
     let test = usersTest.removeUser('2');
+    console.log('test', usersTest.users);
     expect(test.id).toBe('2');
     expect(usersTest.users.length).toBe(2);
     expect(usersTest.getUser('2')).toNotExist();

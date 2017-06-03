@@ -1,5 +1,6 @@
 const socketIO = require('socket.io');
 const express = require('express');
+const _ = require('lodash');
 
 const path = require('path');
 const http = require('http');
@@ -13,9 +14,6 @@ var app = express();
 var server = http.createServer(app);
 var io = socketIO(server);
 var userClass = new Users();
-var roomList = [];
-
-// var {addRoom} = require('./../public/js/active-room.js');
 
 const publicPath = path.join(__dirname, '/..', '/public');
 app.use(express.static(publicPath));
@@ -31,8 +29,6 @@ io.on('connection', (socket)=>{
       return callback("Invalid params.");
     }
     socket.join(lowerRoom);
-    roomList.push(lowerRoom);
-    console.log(userClass.getRoomList());
     userClass.removeUser(socket.id);
     userClass.addUser(socket.id, par.name, lowerRoom);
     io.to(lowerRoom).emit('updateUserList', userClass.getUserList(lowerRoom));
@@ -60,13 +56,8 @@ io.on('connection', (socket)=>{
   socket.on('disconnect', ()=>{
     var user = userClass.removeUser(socket.id);
     if (user) {
-      // var i = 0;
-      // disOne: for (i = 0; i < roomList.length; i++) {
-      //   if (roomList[i] === user.room) {
-      //     break disOne;
-      //   }
-      // }
-      // roomList.splice(i, i);
+      var uniq = userClass.removeUser(socket.id);
+      console.log(userClass.getUserList(user.room));
       io.to(user.room).emit('updateUserList', userClass.getUserList(user.room));
       io.to(user.room).emit('newMessage', generateMessage('Admin', `${user.name} has left the room`));
     }
