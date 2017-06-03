@@ -3,3 +3,55 @@
   margin-left: 25px;
   text-align: center;
 }
+
+/* Dropdown Button */
+.dropbtn {
+    border: none;
+    background: #EA526F;
+    color: white;
+    cursor: pointer;
+    padding: 10px;
+    transition: background .3s ease;
+}
+
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+    position: relative;
+    display: block;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.form-field{
+  position: relative;
+  display: block;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+    color: black;
+    /*padding: 12px 16px;*/
+    text-decoration: none;
+    display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {background-color: #f1f1f1}
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+.form-field:hover .dropbtn {
+  background-color: #FF8A5B;
+  border: none;
+  color: white;
+  cursor: pointer;
+  padding: 10px;
+  transition: background .3s ease;
+}

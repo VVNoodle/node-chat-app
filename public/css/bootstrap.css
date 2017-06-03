@@ -16,6 +16,10 @@ body {
   margin: 0;
 }
 
+.btn-sm:hover {
+     background-position: 0px;
+}
+
 article,
 aside,
 footer,
@@ -2739,19 +2743,19 @@ fieldset[disabled] a.btn {
 
 .btn-info {
   color: #fff;
-  background-color: rgba(49,84,129,1);
-  border-color: rgba(49,84,129,1);
+  background-color: #5bc0de;
+  border-color: #5bc0de;
 }
 
 .btn-info:hover {
   color: #fff;
-  background-color: #698ea5;
-  border-color: #698ea5;
+  background-color: #31b0d5;
+  border-color: #2aabd2;
 }
 
 .btn-info:focus, .btn-info.focus {
-  -webkit-box-shadow: 0 0 0 2px #698ea5;
-          box-shadow: 0 0 0 2px #698ea5;
+  -webkit-box-shadow: 0 0 0 2px rgba(91, 192, 222, 0.5);
+          box-shadow: 0 0 0 2px rgba(91, 192, 222, 0.5);
 }
 
 .btn-info.disabled, .btn-info:disabled {
@@ -2762,9 +2766,9 @@ fieldset[disabled] a.btn {
 .btn-info:active, .btn-info.active,
 .show > .btn-info.dropdown-toggle {
   color: #fff;
-  background-color: #698ea5;
+  background-color: #31b0d5;
   background-image: none;
-  border-color: #698ea5;
+  border-color: #2aabd2;
 }
 
 .btn-success {

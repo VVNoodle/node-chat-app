@@ -2,9 +2,14 @@ var socket = io();
 
 var  insertRoom = function(room){
   if (room !== 'Empty') {
-    $('#test').val(room);  
+    $('#test').val(room);
   }
+  $(".dropdown-content").toggle();
 };
+
+$(".dropbtn").on('click', ()=>{
+  $(".dropdown-content").css("display", "block");
+});
 
 socket.on('connect', function(){
     socket.on('roomList', (par)=>{
@@ -14,14 +19,14 @@ socket.on('connect', function(){
             var html = Mustache.render(template, {
               roomName: par.list[i],
             });
-            $('.dropdown-menu').append(html);
+            $('.dropdown-content').append(html);
         }
       }else {
         var emptyPlate = $('#room-template').html();
         var emptyHTML = Mustache.render(emptyPlate, {
           roomName: 'Empty',
         });
-        $('.dropdown-menu').append(emptyHTML);
+        $('.dropdown-content').append(emptyHTML);
       }
   });
 });
