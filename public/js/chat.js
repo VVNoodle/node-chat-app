@@ -144,8 +144,20 @@ function submitEmo(linkToParse, title){
 socket.on('getEmo', (currEmo)=>{
   var template = $('#emojiPut').html();
   var html = Mustache.render(template, {
-    oneEmoji:currEmo.body,
-    title: currEmo.title
+    emoji1:currEmo.body1,
+    title1: currEmo.title1,
+
+    emoji2:currEmo.body2,
+    title2: currEmo.title2,
+
+    emoji3:currEmo.body3,
+    title3: currEmo.title3,
+
+    emoji4:currEmo.body4,
+    title4: currEmo.title4,
+
+    emoji5:currEmo.body5,
+    title5: currEmo.title5,
   });
   $('#list').append(html);
 });

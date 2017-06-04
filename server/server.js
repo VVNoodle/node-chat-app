@@ -33,7 +33,7 @@ io.on('connection', (socket)=>{
     userClass.addUser(socket.id, par.name, lowerRoom);
     io.to(lowerRoom).emit('updateUserList', userClass.getUserList(lowerRoom));
 
-    socket.emit('newMessage', generateMessage('Admin','Welcome to the chat app'));
+    socket.emit('newMessage', generateMessage('Admin','Welcome to the chat app!', ['1f603']));
     socket.broadcast.to(lowerRoom).emit('newMessage', generateMessage('Admin', `${par.name} has joined the chat`));
     callback();
   });
@@ -72,10 +72,22 @@ io.on('connection', (socket)=>{
       headers: {'user-agent': 'node.js'}
     },(error, response, body)=>{
       if (!error && response.statusCode === 200) {
-        for (var i = 0; i < _.size(body); i++) {
+        for (var i = 0; i < _.size(body)-5; i+=5) {
             socket.emit('getEmo', {
-              body: body[Object.keys(body)[i]],
-              title: Object.keys(body)[i]
+              body1: body[Object.keys(body)[i]],
+              title1: Object.keys(body)[i],
+
+              body2: body[Object.keys(body)[i+1]],
+              title2: Object.keys(body)[i+1],
+
+              body3: body[Object.keys(body)[i+2]],
+              title3: Object.keys(body)[i+2],
+
+              body4: body[Object.keys(body)[i+3]],
+              title4: Object.keys(body)[i+3],
+
+              body5: body[Object.keys(body)[i+4]],
+              title5: Object.keys(body)[i+4],
             });
         }
       }
