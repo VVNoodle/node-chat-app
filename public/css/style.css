@@ -191,3 +191,26 @@ button:disabled {
     margin-right: 0px;
   }
 }
+
+#wrapper {
+  display:none;
+  overflow-y: scroll;
+  width: 200px;
+  height: 100vh;
+  background: #FCEADE; /* For browsers that do not support gradients */
+  background: -webkit-linear-gradient(left top, #EA526F, #FF8A5B); /* For Safari 5.1 to 6.0 */
+  background: -o-linear-gradient(bottom right, #EA526F, #FF8A5B); /* For Opera 11.1 to 12.0 */
+  background: -moz-linear-gradient(bottom right, #EA526F, #FF8A5B); /* For Firefox 3.6 to 15 */
+  background: linear-gradient(to bottom right, #EA526F, #FF8A5B); /* Standard syntax */
+}
+
+#wrapper ul {
+  list-style-type: none;
+}
+
+#wrapper li {
+  background: #FCEADE;
+  border: 1px solid #e1e1e1;
+  border-radius: 5px;
+  margin: 5px;
+}

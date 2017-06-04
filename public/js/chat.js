@@ -1,5 +1,5 @@
 var socket = io();
-
+var emoList = [];
 function scrollToBtm () {
   var msgs = $('#messages');
   var clientHeight = msgs.prop('clientHeight'); //what we can see
@@ -43,16 +43,27 @@ socket.on('updateUserList', function(users){
 
 socket.on('newMessage', function(msg){
   var formattedTime = moment(msg.createdAt).format('h:mm a');
-  var template = $('#message-template').html();
+  var template = $('#message-emoji-template').html();
+  var imgList="";
+  if (msg.text === "-") {
+    msg.text = "";
+  }
+  if (msg.emoji) {
+    for (var i = 0; i < msg.emoji.length; i++) {
+      imgList += `<img src="https://assets-cdn.github.com/images/icons/emoji/unicode/${msg.emoji[i]}.png?v7" style="width:20px;height:20px;">`;
+    }
+  }
   var html = Mustache.render(template, {
     from: msg.from,
     createdAt: formattedTime,
-    text: msg.text
+    text: msg.text,
+    emoji: imgList
   });
-
+  emoList = [];
   $('#messages').append(html);
   scrollToBtm();
 });
+
 
 socket.on('newLocMsg', function(msg){
   var formattedTime = moment(msg.createdAt).format('h:mm a');
@@ -70,11 +81,26 @@ socket.on('newLocMsg', function(msg){
 $('#message-form').on('submit', (e)=>{
   e.preventDefault();  //prevdents default behavior from that event, which initially refresh
   var msgTxtBox = $('[name = input]');
-  socket.emit('createMessage', {
-    text: msgTxtBox.val()
-  }, ()=>{
-     msgTxtBox.val("");
-  });
+  var getEmoji = msgTxtBox.val().match(/:.+(?:\:)/g);
+  if (getEmoji) {
+    var newMsg = msgTxtBox.val().replace(getEmoji[0], "");
+    if (newMsg === "") {
+      newMsg='-';
+    }
+    socket.emit('createMessage', {
+      text: newMsg,
+      image: emoList
+    }, ()=>{
+       msgTxtBox.val("");
+    });
+  }else {
+    socket.emit('createMessage', {
+      text: msgTxtBox.val()
+    }, ()=>{
+       msgTxtBox.val("");
+    });
+  }
+
 });
 
 var locButton = $('#send-loc');
@@ -85,7 +111,6 @@ locButton.on('click', (e)=>{
   locButton.attr('disabled', 'disabled').text('Sending location...');
 
   navigator.geolocation.getCurrentPosition((pos)=>{
-    console.log(pos);
     locButton.removeAttr('disabled').text('Send location');
     socket.emit('createLocMsg', {
       lat: pos.coords.latitude,
@@ -95,4 +120,32 @@ locButton.on('click', (e)=>{
     locButton.removeAttr('disabled').text('Send location');
     alert('Unable to fetch geolocation');
   });
+});
+
+$("#emoji").on("click",function(){
+  var toggle = document.getElementById('wrapper');
+    if (toggle.style.display === 'none' || !toggle.style.display) {
+        toggle.style.display = 'block';
+    } else {
+        toggle.style.display = 'none';
+    }
+
+    socket.emit('requestEmo');
+
+});
+
+function submitEmo(linkToParse, title){
+  $("#writingSpace").val(function() {
+     return `${this.value}:${title}:`;
+ });
+ emoList.push(linkToParse.match(/(\w|-)+(?=\.png)/g)[0]);
+}
+
+socket.on('getEmo', (currEmo)=>{
+  var template = $('#emojiPut').html();
+  var html = Mustache.render(template, {
+    oneEmoji:currEmo.body,
+    title: currEmo.title
+  });
+  $('#list').append(html);
 });

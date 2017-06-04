@@ -41,7 +41,7 @@ io.on('connection', (socket)=>{
   socket.on('createMessage', (indiMsg, callback)=>{
     var user = userClass.getUser(socket.id);
     if (user && isRealString(indiMsg.text)) {
-      io.to(user.room).emit('newMessage', generateMessage(user.name,indiMsg.text));
+      io.to(user.room).emit('newMessage', generateMessage(user.name,indiMsg.text, indiMsg.image));
     }
     callback();
   });
@@ -61,6 +61,25 @@ io.on('connection', (socket)=>{
       io.to(user.room).emit('updateUserList', userClass.getUserList(user.room));
       io.to(user.room).emit('newMessage', generateMessage('Admin', `${user.name} has left the room`));
     }
+  });
+
+  socket.on('requestEmo', ()=>{
+    const request = require('request');
+    var url = `https://api.github.com/emojis`;
+    request({
+      url: url,
+      json: true,
+      headers: {'user-agent': 'node.js'}
+    },(error, response, body)=>{
+      if (!error && response.statusCode === 200) {
+        for (var i = 0; i < _.size(body); i++) {
+            socket.emit('getEmo', {
+              body: body[Object.keys(body)[i]],
+              title: Object.keys(body)[i]
+            });
+        }
+      }
+    });
   });
 });//end ON CONNECTION
 
